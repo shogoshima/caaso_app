@@ -1,6 +1,10 @@
-import 'package:caaso_app/common/show_dialog.dart';
+import 'package:caaso_app/main.dart';
+import 'package:caaso_app/models/user_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'screens.dart';
+import 'package:provider/provider.dart';
+import 'package:caaso_app/screens/screens.dart';
+import 'package:caaso_app/common/show_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,20 +25,9 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  InputDecoration _buildInputDecoration(
-      BuildContext context, String labelText) {
-    return InputDecoration(
-      border: OutlineInputBorder(),
-      isCollapsed: true,
-      contentPadding: EdgeInsets.all(10),
-      labelText: labelText,
-      labelStyle: Theme.of(context).textTheme.bodyMedium,
-      filled: true,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthState>(context, listen: false);
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -43,54 +36,70 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               Text('SÓCIO CAASO',
+                  textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.displayLarge),
               const SizedBox(height: 30.0),
-              TextFormField(
-                controller: usernameController,
-                keyboardType: TextInputType.number,
-                decoration: _buildInputDecoration(context, 'Número USP'),
-                validator: (value) {
-                  // if (value == null || value.isEmpty) {
-                  //   return 'Campo obrigatório';
-                  // } else if (value.length != 8) {
-                  //   return 'O número USP deve ter 8 dígitos';
-                  // }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 15.0),
-              TextFormField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: _buildInputDecoration(context, 'Senha'),
-                validator: (value) {
-                  // if (value == null || value.isEmpty) {
-                  //   return 'Campo obrigatório';
-                  // }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 15.0),
               OutlinedButton(
-                onPressed: () async {
-                  // Realiza a validação do formulário
-                  if (_formKey.currentState!.validate()) {
-                    // usernameController.clear();
-                    // passwordController.clear();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Login realizado com sucesso!'),
-                      ),
-                    );
+                  onPressed: () async {
+                    try {
+                      User? user = await authService.signInWithGoogle();
 
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => const AccountPage()),
-                    );
-                  }
-                },
-                child: const Text('Login'),
-              ),
+                      if (user == null) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Erro ao realizar login'),
+                          ),
+                        );
+                        return;
+                      }
+
+                      final idToken = await user.getIdToken();
+                      final userData = await authService.login(idToken!);
+
+                      auth.saveUser(userData);
+
+                      if (!context.mounted) return;
+                      if (userData.nusp == "") {
+                        showInputDialog(context, 'Bem Vindo!',
+                            'Como é a sua primeira vez, pedimos que nos informe o seu número USP.',
+                            (nusp) async {
+                          final data = UserData(
+                            id: user.uid,
+                            nusp: nusp,
+                            displayName: user.displayName,
+                            photoUrl: user.photoURL,
+                          );
+                          try {
+                            UserData newUserData =
+                                await authService.create(data, idToken);
+                            auth.saveUser(newUserData);
+                            if (!context.mounted) return;
+                          } catch (e) {
+                            showErrorDialog(context, e.toString());
+                          }
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Login realizado com sucesso!'),
+                            ),
+                          );
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => const AccountPage()),
+                          );
+                        });
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => const AccountPage()),
+                        );
+                      }
+                    } catch (e) {
+                      showErrorDialog(context, e.toString());
+                    }
+                  },
+                  child: const Text('Login com Google')),
               TextButton(
                 onPressed: () {
                   showInfoDialog(

@@ -1,9 +1,26 @@
+import 'package:caaso_app/models/user_data.dart';
+
 import 'screens/screens.dart';
+import 'services/services.dart';
 import 'package:flutter/material.dart';
 import 'common/theme.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+final apiClient = ApiService('http://10.0.2.2:3000');
+final AuthService authService = AuthService(apiClient);
+final SubscriptionService subscriptionService = SubscriptionService(apiClient);
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(ChangeNotifierProvider(
+    create: (context) => AuthState(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,16 +37,10 @@ class MyApp extends StatelessWidget {
 }
 
 class AuthState extends ChangeNotifier {
-  bool _isAuthenticated = false;
-  bool get isAuthenticated => _isAuthenticated;
+  late UserData? user;
 
-  void login() {
-    _isAuthenticated = true;
-    notifyListeners();
-  }
-
-  void logout() {
-    _isAuthenticated = false;
+  void saveUser(UserData userData) {
+    user = userData;
     notifyListeners();
   }
 }
