@@ -6,6 +6,7 @@ import 'api_service.dart';
 
 class AuthService {
   final ApiService api;
+  final GoogleSignIn _googleSignIn = GoogleSignIn(); // Single instance
 
   AuthService(this.api);
 
@@ -15,22 +16,23 @@ class AuthService {
     if (token == null) {
       throw Exception("Not logged in");
     }
-    final data = await api.get('/users/me', token);
-    return UserData.fromJson(data);
+    final data = await api.get('/user/profile', token);
+    return UserData.fromJson(data['user']);
   }
 
   Future<User?> signInWithGoogle() async {
     // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    if (googleUser == null) return null;
 
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
     );
 
     // Once signed in, return the UserCredential
@@ -52,8 +54,7 @@ class AuthService {
   }
 
   Future<void> logoutWithGoogle() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    await googleSignIn.signOut();
+    await _googleSignIn.signOut();
     SecureStorage storage = SecureStorage();
     await storage.clearStorage();
   }

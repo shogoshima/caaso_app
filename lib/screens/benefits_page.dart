@@ -7,14 +7,7 @@ class BenefitsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image(
-          image: const AssetImage('assets/logo.png'),
-          height: 100,
-          width: 100,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        centerTitle: true,
-        toolbarHeight: 100,
+        title: const Text('Benefícios'),
       ),
       body: SafeArea(
         child: ListView.builder(

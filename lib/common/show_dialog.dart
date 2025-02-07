@@ -25,8 +25,8 @@ Future<void> showSuccessDialog(BuildContext context, String content) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Sucesso', style: TextStyle(color: Colors.green)),
-        content: Text(content),
+        title: Icon(Icons.check_circle, color: Colors.green, size: 100),
+        content: Text(content, textAlign: TextAlign.center),
         actions: <Widget>[
           TextButton(
             child: const Text('OK'),

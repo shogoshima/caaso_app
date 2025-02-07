@@ -68,21 +68,28 @@ class _ScanPageState extends State<ScanPage> {
                     child: ElevatedButton(
                         onPressed: () async {
                           if ((key.currentState as FormState).validate()) {
-                            final data = await subscriptionService
-                                .getSubscriptionStatus(controller.text);
+                            try {
+                              final data = await subscriptionService
+                                  .getSubscriptionStatus(controller.text);
 
-                            final isSubscribed = data['isSubscribed'];
-                            final displayName = data['displayName'];
-                            if (!context.mounted) return;
-                            if (isSubscribed) {
-                              showSuccessDialog(
-                                context,
-                                'O usuário $displayName está inscrito',
-                              );
-                            } else {
+                              final isSubscribed = data['isSubscribed'];
+                              final displayName = data['displayName'];
+                              if (!context.mounted) return;
+                              if (isSubscribed) {
+                                showSuccessDialog(
+                                  context,
+                                  'Assinatura Válida\nUsuário: $displayName',
+                                );
+                              } else {
+                                showErrorDialog(
+                                  context,
+                                  'Assinatura Inativa\nUsuário: $displayName',
+                                );
+                              }
+                            } catch (e) {
                               showErrorDialog(
                                 context,
-                                'O usuário $displayName não está inscrito',
+                                'O número USP não foi encontrado',
                               );
                             }
                           }

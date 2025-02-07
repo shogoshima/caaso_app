@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:caaso_app/main.dart';
 import 'package:caaso_app/models/user_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +16,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool _isSigningIn = false;
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -28,93 +32,152 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthState>(context, listen: false);
-    return Form(
-      key: _formKey,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            children: <Widget>[
-              Text('SÓCIO CAASO',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.displayLarge),
-              const SizedBox(height: 30.0),
-              OutlinedButton(
-                  onPressed: () async {
-                    try {
-                      User? user = await authService.signInWithGoogle();
+    return Scaffold(
+      appBar: AppBar(
+        title: Image(
+            image: AssetImage(
+              'assets/logo.png',
+            ),
+            height: 100,
+            width: 100,
+            color: Theme.of(context).colorScheme.primary),
+        centerTitle: true,
+        toolbarHeight: 100,
+        automaticallyImplyLeading: false,
+      ),
+      body: Center(
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                children: <Widget>[
+                  Text('SÓCIO CAASO',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.displayLarge),
+                  const SizedBox(height: 30.0),
+                  OutlinedButton(
+                      onPressed: _isSigningIn
+                          ? null
+                          : () async {
+                              if (_isSigningIn) return;
+                              setState(() => _isSigningIn = true);
 
-                      if (user == null) {
-                        if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Erro ao realizar login'),
-                          ),
-                        );
-                        return;
-                      }
+                              try {
+                                User? user =
+                                    await authService.signInWithGoogle();
 
-                      final idToken = await user.getIdToken();
-                      final userData = await authService.login(idToken!);
+                                if (user == null) {
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Erro ao realizar login'),
+                                    ),
+                                  );
+                                  return;
+                                }
 
-                      auth.saveUser(userData);
+                                final emailDomain = user.email!.split('@')[1];
+                                if (emailDomain != 'usp.br') {
+                                  await authService.logoutWithGoogle();
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Apenas e-mails USP são permitidos'),
+                                    ),
+                                  );
+                                  return;
+                                }
 
-                      if (!context.mounted) return;
-                      if (userData.nusp == "") {
-                        showInputDialog(context, 'Bem Vindo!',
-                            'Como é a sua primeira vez, pedimos que nos informe o seu número USP.',
-                            (nusp) async {
-                          final data = UserData(
-                            id: user.uid,
-                            nusp: nusp,
-                            displayName: user.displayName,
-                            photoUrl: user.photoURL,
-                          );
-                          try {
-                            UserData newUserData =
-                                await authService.create(data, idToken);
-                            auth.saveUser(newUserData);
-                            if (!context.mounted) return;
-                          } catch (e) {
-                            showErrorDialog(context, e.toString());
-                          }
+                                final idToken = await user.getIdToken();
+                                final userData =
+                                    await authService.login(idToken!);
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Login realizado com sucesso!'),
-                            ),
-                          );
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => const AccountPage()),
-                          );
-                        });
-                      } else {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => const AccountPage()),
-                        );
-                      }
-                    } catch (e) {
-                      showErrorDialog(context, e.toString());
-                    }
-                  },
-                  child: const Text('Login com Google')),
-              TextButton(
-                onPressed: () {
-                  showInfoDialog(
-                      context,
-                      'Para se tornar membro, é necessário '
-                      'ser aluno da USP e comparecer à sede da CAASO para '
-                      'realizar o pagamento da taxa de inscrição.');
-                },
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.secondary,
-                ),
-                child: const Text('Como me tornar membro?'),
-              )
-            ],
+                                log(userData.toString());
+
+                                auth.saveUser(userData);
+
+                                if (!context.mounted) return;
+                                if (userData.nusp == "") {
+                                  showInputDialog(context, 'Bem Vinde!',
+                                      'Como é a sua primeira vez, pedimos que nos informe o seu número USP.',
+                                      (nusp) async {
+                                    final data = UserData(
+                                      id: user.uid,
+                                      nusp: nusp,
+                                      displayName: user.displayName,
+                                      email: user.email,
+                                      photoUrl: user.photoURL,
+                                    );
+
+                                    try {
+                                      UserData newUserData = await authService
+                                          .create(data, idToken);
+                                      auth.saveUser(newUserData);
+                                      if (!context.mounted) return;
+                                    } catch (e) {
+                                      showErrorDialog(context, e.toString());
+                                    }
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'Login realizado com sucesso!'),
+                                      ),
+                                    );
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const AccountPage()),
+                                    );
+                                  });
+                                } else {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const AccountPage()),
+                                  );
+                                }
+                              } catch (e) {
+                                showErrorDialog(context,
+                                    "Erro ao realizar login. \nTente novamente.");
+                              } finally {
+                                setState(() => _isSigningIn = false);
+                              }
+                            },
+                      child: const Text('Login com Google')),
+                  TextButton(
+                    onPressed: () {
+                      showInfoDialog(
+                          context,
+                          'Para se tornar membro, é necessário '
+                          'ser aluno da USP e comparecer à sede da CAASO para '
+                          'realizar o pagamento da taxa de inscrição.');
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.secondary,
+                    ),
+                    child: const Text('Como me tornar membro?'),
+                  )
+                ],
+              ),
+            ),
           ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Theme.of(context).colorScheme.surface,
+        child: TextButton.icon(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const ScanPage(),
+            ));
+          },
+          icon: const Icon(Icons.camera),
+          label: const Text('Escanear QR Code (Estabelecimentos)'),
+          iconAlignment: IconAlignment.start,
         ),
       ),
     );

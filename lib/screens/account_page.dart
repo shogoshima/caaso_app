@@ -8,11 +8,6 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthState>(context, listen: false);
-    if (auth.user == null) {
-      return const LoginPage();
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Image(
@@ -29,41 +24,61 @@ class AccountPage extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Text('Olá, ${auth.user?.displayName?.split(' ')[0]}!',
-                    style: Theme.of(context).textTheme.titleLarge),
-                const SizedBox(height: 15.0),
-                Text(auth.user?.isSubscribed == true
-                    ? 'Sua assinatura é válida até ${auth.user?.expirationDate}'
-                    : 'Você não possui uma assinatura ativa'),
-                const SizedBox(height: 30.0),
-                OutlinedButton(
-                    onPressed: auth.user?.isSubscribed == false
-                        ? null
-                        : () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => MembershipPage(
-                                      name: auth.user?.displayName,
-                                      userId: auth.user?.nusp,
-                                      profilePhotoUrl: auth.user?.photoUrl,
-                                      validUntil: auth.user?.expirationDate)),
-                            );
-                          },
-                    child: Text('Carteirinha')),
-                const SizedBox(height: 5.0),
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => const BenefitsPage()),
-                      );
-                    },
-                    child: Text('Benefícios')),
-                const SizedBox(height: 5.0),
-                OutlinedButton(onPressed: () {}, child: Text('Pagamento')),
-              ],
+            child: Consumer<AuthState>(
+              builder: (context, auth, child) {
+                if (auth.user == null) {
+                  return const Text(
+                      "Realize o login novamente para acessar esta página");
+                }
+
+                return Column(
+                  children: [
+                    Text('Olá, ${auth.user?.displayName?.split(' ')[0]}!',
+                        style: Theme.of(context).textTheme.titleLarge),
+                    const SizedBox(height: 15.0),
+                    Text(
+                        auth.user?.isSubscribed == true
+                            ? 'Sua assinatura é válida até \n ${auth.user?.expirationDate?.day}/${auth.user?.expirationDate?.month}/${auth.user?.expirationDate?.year}'
+                            : 'Você não possui uma assinatura ativa',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: 30.0),
+                    OutlinedButton(
+                        onPressed: auth.user?.isSubscribed == false
+                            ? null
+                            : () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => MembershipPage(
+                                          name: auth.user?.displayName,
+                                          userId: auth.user?.nusp,
+                                          profilePhotoUrl: auth.user?.photoUrl,
+                                          validUntil:
+                                              auth.user?.expirationDate)),
+                                );
+                              },
+                        child: Text('Carteirinha')),
+                    const SizedBox(height: 5.0),
+                    OutlinedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => const BenefitsPage()),
+                          );
+                        },
+                        child: Text('Benefícios')),
+                    const SizedBox(height: 5.0),
+                    OutlinedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => const PaymentPage()),
+                          );
+                        },
+                        child: Text('Pagamento')),
+                  ],
+                );
+              },
             ),
           ),
         ),
@@ -74,7 +89,9 @@ class AccountPage extends StatelessWidget {
           onPressed: () async {
             await authService.logoutWithGoogle();
             if (!context.mounted) return;
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+            );
           },
           icon: const Icon(Icons.logout),
           label: const Text('Logout'),
