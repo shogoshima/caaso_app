@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:caaso_app/main.dart';
 import 'package:caaso_app/models/user_data.dart';
+import 'package:caaso_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
 
                               try {
                                 User? user =
-                                    await authService.signInWithGoogle();
+                                    await AuthService().signInWithGoogle();
 
                                 if (user == null) {
                                   if (!context.mounted) return;
@@ -80,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                 final emailDomain = user.email!.split('@')[1];
                                 if (emailDomain != 'usp.br') {
-                                  await authService.logoutWithGoogle();
+                                  await AuthService().logoutWithGoogle();
                                   if (!context.mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -93,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                 final idToken = await user.getIdToken();
                                 final userData =
-                                    await authService.login(idToken!);
+                                    await AuthService().login(idToken!);
 
                                 log(userData.toString());
 
@@ -113,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                                     );
 
                                     try {
-                                      UserData newUserData = await authService
+                                      UserData newUserData = await AuthService()
                                           .create(data, idToken);
                                       auth.saveUser(newUserData);
                                       if (!context.mounted) return;
@@ -141,6 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                                   );
                                 }
                               } catch (e) {
+                                log(e.toString());
                                 showErrorDialog(context,
                                     "Erro ao realizar login. \nTente novamente.");
                               } finally {
@@ -154,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                           context,
                           'Para se tornar membro, basta logar com a sua conta '
                           'google da USP e realizar o pagamento da taxa '
-                          'de inscrição!');
+                          'de inscrição');
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.secondary,

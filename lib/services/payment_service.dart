@@ -3,9 +3,13 @@ import 'package:caaso_app/models/models.dart';
 import 'package:caaso_app/services/services.dart';
 
 class PaymentService {
-  final ApiService api;
+  static final PaymentService _instance = PaymentService._internal();
 
-  PaymentService(this.api);
+  PaymentService._internal();
+
+  factory PaymentService() {
+    return _instance;
+  }
 
   Future<PaymentData> createPayment(
       UserType userType, PlanType planType) async {
@@ -17,7 +21,7 @@ class PaymentService {
       'planType': planType.index,
     };
 
-    final data = await api.post('/payment/create', qrData, token);
+    final data = await ApiService().post('/payment/create', qrData, token);
 
     return PaymentData.fromJson(data['payment']);
   }
@@ -26,7 +30,7 @@ class PaymentService {
     SecureStorage storage = SecureStorage();
     String? token = await storage.getAccessToken();
 
-    final data = await api.get('/payment', token);
+    final data = await ApiService().get('/payment', token);
 
     return PaymentData.fromJson(data['payment']);
   }

@@ -1,5 +1,5 @@
 import 'package:caaso_app/common/show_dialog.dart';
-import 'package:caaso_app/main.dart';
+import 'package:caaso_app/services/services.dart';
 import 'package:flutter/material.dart';
 
 class ScanPage extends StatefulWidget {
@@ -69,7 +69,7 @@ class _ScanPageState extends State<ScanPage> {
                         onPressed: () async {
                           if ((key.currentState as FormState).validate()) {
                             try {
-                              final data = await subscriptionService
+                              final data = await SubscriptionService()
                                   .getSubscriptionStatus(controller.text);
 
                               final isSubscribed = data['isSubscribed'];

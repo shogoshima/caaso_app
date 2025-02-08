@@ -1,4 +1,5 @@
 import 'package:caaso_app/main.dart';
+import 'package:caaso_app/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens.dart';
@@ -97,7 +98,7 @@ class AccountPage extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
         child: TextButton.icon(
           onPressed: () async {
-            await authService.logoutWithGoogle();
+            await AuthService().logoutWithGoogle();
             if (!context.mounted) return;
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => const LoginPage()),

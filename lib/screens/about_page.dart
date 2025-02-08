@@ -78,67 +78,81 @@ class _AboutPageState extends State<AboutPage> {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 10.0),
-          Align(
-            alignment: Alignment.center,
-            child: ConfettiWidget(
-              particleDrag: 0.025, // apply drag to the confetti
-              emissionFrequency: 0.01, // how often it should emit
-              numberOfParticles: 100, // number of particles to emit
-
-              confettiController: _controller,
-              blastDirectionality: BlastDirectionality
-                  .explosive, // don't specify a direction, blast randomly
-              shouldLoop: false,
-              colors: const [
-                Colors.green,
-                Colors.blue,
-                Colors.pink,
-                Colors.orange,
-                Colors.purple,
-                Colors.red,
-                Colors.yellow,
-                Colors.lightGreen
-              ], // manually specify the colors to be used
-              createParticlePath: drawStar, // define a custom shape/path.
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              _controller.play();
-            },
-            child: Text(
-              'Shogo Shima',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-          ),
-          const SizedBox(height: 20.0),
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                icon: const Icon(SimpleIcons.github),
-                onPressed: () async {
-                  await _launchUrl('https://github.com/shogoshima');
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(SimpleIcons.github),
+                    onPressed: () async {
+                      await _launchUrl('https://github.com/shogoshima');
+                    },
+                  ),
+                  IconButton(
+                      icon: const Icon(SimpleIcons.linkedin),
+                      onPressed: () async {
+                        await _launchUrl(
+                            'https://www.linkedin.com/in/shogo-shima/');
+                      }),
+                ],
               ),
-              IconButton(
-                icon: const Icon(SimpleIcons.linkedin),
-                onPressed: () async {
-                  await _launchUrl('https://linkedin.com/in/shogo-shima');
-                },
+              Align(
+                alignment: Alignment.center,
+                child: ConfettiWidget(
+                  particleDrag: 0.025, // apply drag to the confetti
+                  emissionFrequency: 0.01, // how often it should emit
+                  numberOfParticles: 100, // number of particles to emit
+
+                  confettiController: _controller,
+                  blastDirectionality: BlastDirectionality
+                      .explosive, // don't specify a direction, blast randomly
+                  shouldLoop: false,
+                  colors: const [
+                    Colors.green,
+                    Colors.blue,
+                    Colors.pink,
+                    Colors.orange,
+                    Colors.purple,
+                    Colors.red,
+                    Colors.yellow,
+                    Colors.lightGreen
+                  ], // manually specify the colors to be used
+                  createParticlePath: drawStar, // define a custom shape/path.
+                ),
               ),
-              IconButton(
-                icon: Image.asset("assets/codelab.png",
-                    width: 35,
-                    height: 35,
-                    color: Theme.of(context).colorScheme.onSurface),
-                onPressed: () async {
-                  await _launchUrl('https://codelab.icmc.usp.br/');
+              GestureDetector(
+                onTap: () {
+                  _controller.play();
                 },
+                child: Text(
+                  'Shogo Shima',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 20.0),
+          Column(
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                IconButton(
+                  icon: const Icon(SimpleIcons.github),
+                  onPressed: () async {
+                    await _launchUrl('https://github.com/Windows87');
+                  },
+                ),
+                IconButton(
+                    icon: const Icon(SimpleIcons.linkedin),
+                    onPressed: () async {
+                      await _launchUrl('https://www.linkedin.com/in/yfaria');
+                    }),
+              ]),
+              Text('Yuri Faria', style: Theme.of(context).textTheme.titleLarge),
+            ],
+          ),
+          const SizedBox(height: 30.0),
           Text('Caso encontre erros, reporte para o email:',
               style: Theme.of(context).textTheme.titleSmall),
           const SizedBox(height: 5.0),
@@ -158,6 +172,15 @@ class _AboutPageState extends State<AboutPage> {
           Text(
             '© 2025 Codelab',
             style: Theme.of(context).textTheme.titleSmall,
+          ),
+          IconButton(
+            icon: Image.asset("assets/codelab.png",
+                width: 50,
+                height: 50,
+                color: Theme.of(context).colorScheme.onSurface),
+            onPressed: () async {
+              await _launchUrl('https://codelab.icmc.usp.br/');
+            },
           ),
         ],
       ),

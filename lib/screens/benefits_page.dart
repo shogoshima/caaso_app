@@ -1,5 +1,5 @@
-import 'package:caaso_app/main.dart';
 import 'package:caaso_app/models/models.dart';
+import 'package:caaso_app/services/services.dart';
 import 'package:flutter/material.dart';
 
 class BenefitsPage extends StatefulWidget {
@@ -19,7 +19,7 @@ class _BenefitsPageState extends State<BenefitsPage> {
   }
 
   Future<void> fetchBenefits() async {
-    benefits = benefitService.fetchBenefits();
+    benefits = BenefitService().fetchBenefits();
   }
 
   @override

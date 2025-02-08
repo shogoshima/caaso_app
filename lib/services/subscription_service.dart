@@ -1,12 +1,16 @@
 import 'api_service.dart';
 
 class SubscriptionService {
-  final ApiService api;
+  static final SubscriptionService _instance = SubscriptionService._internal();
 
-  SubscriptionService(this.api);
+  SubscriptionService._internal();
+
+  factory SubscriptionService() {
+    return _instance;
+  }
 
   Future<dynamic> getSubscriptionStatus(String nusp) async {
-    final data = await api.get('/subscription/$nusp');
+    final data = await ApiService().get('/subscription/$nusp');
     return data;
   }
 }

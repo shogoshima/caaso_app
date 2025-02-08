@@ -7,18 +7,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 
-final apiClient = ApiService(
-    'https://358d-2804-1b2-f144-6be7-d18c-3868-c68-a3e7.ngrok-free.app');
-final AuthService authService = AuthService(apiClient);
-final SubscriptionService subscriptionService = SubscriptionService(apiClient);
-final PaymentService paymentService = PaymentService(apiClient);
-final BenefitService benefitService = BenefitService(apiClient);
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  ApiService.initialize(
+      'https://dbc1-2804-1b2-f144-6be7-c031-105a-82bf-d418.ngrok-free.app');
+  AuthService();
+  BenefitService();
+  PaymentService();
+  SubscriptionService();
   runApp(ChangeNotifierProvider(
     create: (context) => AuthState(),
     child: const MyApp(),
@@ -64,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    loggedUser = authService.getUser();
+    loggedUser = AuthService().getUser();
   }
 
   @override

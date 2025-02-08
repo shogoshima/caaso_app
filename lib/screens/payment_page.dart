@@ -4,6 +4,7 @@ import 'package:caaso_app/common/show_dialog.dart';
 import 'package:caaso_app/main.dart';
 import 'package:caaso_app/common/currency_formatter.dart';
 import 'package:caaso_app/models/prices.dart';
+import 'package:caaso_app/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   Future<PaymentData> _refreshPaymentData() async {
     log("Refreshing payment data");
-    final newPayment = paymentService.getPayment();
+    final newPayment = PaymentService().getPayment();
     setState(() {
       currentPayment = newPayment;
     });
@@ -92,99 +93,96 @@ class _PaymentPageState extends State<PaymentPage> {
 
                   if (snapshot.hasData) {
                     final paymentData = snapshot.data!;
-                    if (paymentData.isPaid == true) {
-                      children = <Widget>[
-                        const Icon(Icons.check_circle,
-                            color: Colors.green, size: 100),
-                        const Text('Pagamento Confirmado!',
-                            style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold)),
-                      ];
-                    } else {
-                      children = <Widget>[
-                        Card(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHigh,
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                QrImageView(
-                                  data: paymentData.qrCode!,
-                                  version: QrVersions.auto,
-                                  size: 250.0,
-                                  backgroundColor: Colors.grey.shade300,
-                                ),
-                                const SizedBox(height: 20),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Clipboard.setData(ClipboardData(
-                                        text: paymentData.qrCode!));
 
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                            'PIX copiado para a área de transferência'),
-                                      ),
-                                    );
-                                  },
-                                  child: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(Icons.copy),
-                                      SizedBox(width: 10),
-                                      Text('Copiar PIX'),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
-                                Text(
-                                    currencyFormatter
-                                        .format(paymentData.amount),
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 40),
-                        OutlinedButton(
-                            onPressed: () async {
-                              try {
-                                final paymentData = await _refreshPaymentData();
+                    children = <Widget>[
+                      Card(
+                        color:
+                            Theme.of(context).colorScheme.surfaceContainerHigh,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              QrImageView(
+                                data: paymentData.qrCode!,
+                                version: QrVersions.auto,
+                                size: 250.0,
+                                backgroundColor: Colors.grey.shade300,
+                              ),
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Clipboard.setData(
+                                      ClipboardData(text: paymentData.qrCode!));
 
-                                if (paymentData.isPaid == true) {
-                                  final userData = await authService.getUser();
-                                  log("Fetched user data: ${userData.toJson()}");
-
-                                  if (context.mounted) {
-                                    Provider.of<AuthState>(context,
-                                            listen: false)
-                                        .saveUser(userData);
-                                  }
-                                } else {
-                                  if (!context.mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text(
-                                          'Aguarde a confirmação do pagamento'),
+                                          'PIX copiado para a área de transferência'),
+                                    ),
+                                  );
+                                },
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.copy),
+                                    SizedBox(width: 10),
+                                    Text('Copiar PIX'),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Text(currencyFormatter.format(paymentData.amount),
+                                  style:
+                                      Theme.of(context).textTheme.titleLarge),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                          'Você possui até 24h para realizar o pagamento\n'
+                          'Após o período, você poderá gerar um novo QR Code',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.titleSmall),
+                      const SizedBox(height: 20),
+                      OutlinedButton(
+                          onPressed: () async {
+                            try {
+                              final paymentData = await _refreshPaymentData();
+
+                              if (paymentData.isPaid == true) {
+                                final userData = await AuthService().getUser();
+                                log("Fetched user data: ${userData.toJson()}");
+
+                                if (context.mounted) {
+                                  Provider.of<AuthState>(context, listen: false)
+                                      .saveUser(userData);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Pagamento aprovado!'),
                                     ),
                                   );
                                 }
-                              } catch (e) {
-                                log("Error updating payment: $e");
-                                if (context.mounted) {
-                                  showErrorDialog(context, e.toString());
-                                }
+                              } else {
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Pagamento pendente'),
+                                  ),
+                                );
                               }
-                            },
-                            child: const Text('Atualizar')),
-                      ];
-                    }
+                            } catch (e) {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(e.toString()),
+                                ),
+                              );
+                            }
+                          },
+                          child: const Text('Atualizar')),
+                    ];
                   } else {
                     children = <Widget>[
                       Text('Selecione as opções:',
@@ -240,7 +238,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             OutlinedButton(
                                 onPressed: () async {
                                   try {
-                                    await paymentService.createPayment(
+                                    await PaymentService().createPayment(
                                         selectedUser!, selectedPlan!);
                                     currentPayment = _refreshPaymentData();
                                   } catch (e) {
@@ -249,6 +247,11 @@ class _PaymentPageState extends State<PaymentPage> {
                                   }
                                 },
                                 child: const Text('Gerar QR Code')),
+                            const SizedBox(height: 10),
+                            Text(
+                                'O plano é sujeito a cancelamento caso \nvocê não seja do tipo especificado',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.titleSmall),
                           ],
                         ),
                     ];
