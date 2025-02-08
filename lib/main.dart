@@ -8,10 +8,11 @@ import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 
 final apiClient = ApiService(
-    'https://09f2-2804-1b2-f144-6be7-acef-7d71-a487-e16a.ngrok-free.app');
+    'https://358d-2804-1b2-f144-6be7-d18c-3868-c68-a3e7.ngrok-free.app');
 final AuthService authService = AuthService(apiClient);
 final SubscriptionService subscriptionService = SubscriptionService(apiClient);
 final PaymentService paymentService = PaymentService(apiClient);
+final BenefitService benefitService = BenefitService(apiClient);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

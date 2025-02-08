@@ -20,6 +20,16 @@ class AccountPage extends StatelessWidget {
         centerTitle: true,
         toolbarHeight: 100,
         automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const AboutPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: Center(

@@ -152,9 +152,9 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       showInfoDialog(
                           context,
-                          'Para se tornar membro, é necessário '
-                          'ser aluno da USP e comparecer à sede da CAASO para '
-                          'realizar o pagamento da taxa de inscrição.');
+                          'Para se tornar membro, basta logar com a sua conta '
+                          'google da USP e realizar o pagamento da taxa '
+                          'de inscrição!');
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.secondary,

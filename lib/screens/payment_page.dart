@@ -25,7 +25,17 @@ class _PaymentPageState extends State<PaymentPage> {
 
   Future<PaymentData>? currentPayment;
 
+  @override
+  void initState() {
+    super.initState();
+    final auth = Provider.of<AuthState>(context, listen: false);
+    if (auth.user != null && auth.user!.isSubscribed == false) {
+      currentPayment = _refreshPaymentData();
+    }
+  }
+
   Future<PaymentData> _refreshPaymentData() async {
+    log("Refreshing payment data");
     final newPayment = paymentService.getPayment();
     setState(() {
       currentPayment = newPayment;
@@ -232,7 +242,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                   try {
                                     await paymentService.createPayment(
                                         selectedUser!, selectedPlan!);
-                                    _refreshPaymentData();
+                                    currentPayment = _refreshPaymentData();
                                   } catch (e) {
                                     if (!context.mounted) return;
                                     showErrorDialog(context, e.toString());
