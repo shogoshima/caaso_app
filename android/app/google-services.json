@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "425041072425",
+    "project_id": "caaso-app",
+    "storage_bucket": "caaso-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425041072425:android:8267ec4abceb9823f6e738",
+        "android_client_info": {
+          "package_name": "com.example.caaso_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425041072425-m858b48svq195f54l7vv10sf90fephfa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.caaso_app",
+            "certificate_hash": "9bf11e22a945c3ddb693f5e1325ca07b298850e4"
+          }
+        },
+        {
+          "client_id": "425041072425-f5c8dmf65aqpgv1uaeq4ed6tc180vkh4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoab1820rbUMdr66lRh9UFh9a65fn661w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425041072425-f5c8dmf65aqpgv1uaeq4ed6tc180vkh4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "425041072425-o9btg72e46at9b7i9gi7lds5bgjh42hb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.caasoApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

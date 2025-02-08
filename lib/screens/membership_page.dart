@@ -2,7 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class MembershipPage extends StatelessWidget {
-  const MembershipPage({super.key});
+  final String? name;
+  final String? userId;
+  final String? profilePhotoUrl;
+  final DateTime? validUntil;
+
+  const MembershipPage(
+      {super.key,
+      this.name,
+      this.userId,
+      this.profilePhotoUrl,
+      this.validUntil});
 
   @override
   Widget build(BuildContext context) {
@@ -32,32 +42,33 @@ class MembershipPage extends StatelessWidget {
                     children: [
                       Text('Sócio',
                           style: Theme.of(context).textTheme.displaySmall),
-                      Image(
-                        image: const AssetImage('assets/profile.jpg'),
-                        height: 250,
-                        width: 200,
+                      Container(
+                        height: 100,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Image(
+                          image: Image.network(profilePhotoUrl ?? '').image,
+                        ),
                       ),
                       Text(
-                        'Yuri Donizete Claudino de Faria Santos',
+                        name ?? 'Anônimo',
                         style: Theme.of(context).textTheme.titleLarge,
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        'Morador Aloja',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      Text(
-                        '13725587',
-                        style: Theme.of(context).textTheme.titleMedium,
+                        userId ?? '00000000',
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Card(
                         color: Theme.of(context).colorScheme.onSurface,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: QrImageView(
-                            data: '13725587',
+                            data: userId ?? '00000000',
                             version: QrVersions.auto,
-                            size: 225.0,
+                            size: 250.0,
                           ),
                         ),
                       ),
@@ -66,7 +77,7 @@ class MembershipPage extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Ativo até 12/2025',
+                            'Válido até ${validUntil?.day}/${validUntil?.month}/${validUntil?.year}',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ),

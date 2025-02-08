@@ -1,41 +1,92 @@
+import 'package:caaso_app/main.dart';
+import 'package:caaso_app/models/models.dart';
 import 'package:flutter/material.dart';
 
-class BenefitsPage extends StatelessWidget {
+class BenefitsPage extends StatefulWidget {
   const BenefitsPage({super.key});
+
+  @override
+  State<BenefitsPage> createState() => _BenefitsPageState();
+}
+
+class _BenefitsPageState extends State<BenefitsPage> {
+  Future<List<BenefitData>>? benefits;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchBenefits();
+  }
+
+  Future<void> fetchBenefits() async {
+    benefits = benefitService.fetchBenefits();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image(
-          image: const AssetImage('assets/logo.png'),
-          height: 100,
-          width: 100,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        centerTitle: true,
-        toolbarHeight: 100,
+        title: const Text('Benefícios'),
       ),
       body: SafeArea(
-        child: ListView.builder(
-            itemCount: 5,
-            itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-                  child: ListTile(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    tileColor:
-                        Theme.of(context).colorScheme.surfaceContainerHigh,
-                    title: Text('Trem Bão $index',
-                        style: Theme.of(context).textTheme.titleLarge),
-                    subtitle: Text('Descrição do benefício $index',
-                        style: Theme.of(context).textTheme.bodySmall),
-                    leading: Image(
-                      image: const AssetImage('assets/trem_bao.png'),
-                    ),
-                  ),
-                )),
+        child: FutureBuilder<List<BenefitData>>(
+          future: benefits,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            if (snapshot.hasError || snapshot.data == null) {
+              return Center(
+                child: Text('Erro ao carregar benefícios'),
+              );
+            }
+
+            List<BenefitData> benefits = snapshot.data!;
+            return ListView.builder(
+                itemCount: benefits.length,
+                itemBuilder: (context, index) => Card(
+                      color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Row(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: SizedBox(
+                                width: 120,
+                                height: 120,
+                                child: Image.network(
+                                  benefits[index].photoUrl,
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: ListTile(
+                                title: Padding(
+                                  padding: const EdgeInsets.only(bottom: 5),
+                                  child: Text(
+                                    benefits[index].title,
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  benefits[index].description,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ));
+          },
+        ),
       ),
     );
   }

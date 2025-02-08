@@ -1,9 +1,28 @@
 import 'screens/screens.dart';
+import 'services/services.dart';
+import 'models/models.dart';
 import 'package:flutter/material.dart';
 import 'common/theme.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+final apiClient = ApiService(
+    'https://358d-2804-1b2-f144-6be7-d18c-3868-c68-a3e7.ngrok-free.app');
+final AuthService authService = AuthService(apiClient);
+final SubscriptionService subscriptionService = SubscriptionService(apiClient);
+final PaymentService paymentService = PaymentService(apiClient);
+final BenefitService benefitService = BenefitService(apiClient);
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(ChangeNotifierProvider(
+    create: (context) => AuthState(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,16 +39,14 @@ class MyApp extends StatelessWidget {
 }
 
 class AuthState extends ChangeNotifier {
-  bool _isAuthenticated = false;
-  bool get isAuthenticated => _isAuthenticated;
+  late UserData? user;
 
-  void login() {
-    _isAuthenticated = true;
-    notifyListeners();
+  void initUser(UserData userData) {
+    user = userData;
   }
 
-  void logout() {
-    _isAuthenticated = false;
+  void saveUser(UserData userData) {
+    user = userData;
     notifyListeners();
   }
 }
@@ -42,35 +59,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<UserData>? loggedUser;
+
+  @override
+  void initState() {
+    super.initState();
+    loggedUser = authService.getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Image(
-            image: AssetImage(
-              'assets/logo.png',
-            ),
-            height: 100,
-            width: 100,
-            color: Theme.of(context).colorScheme.primary),
-        centerTitle: true,
-        toolbarHeight: 100,
-      ),
-      body: SafeArea(
-        child: const Center(child: LoginPage()),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Theme.of(context).colorScheme.surface,
-        child: TextButton.icon(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const ScanPage(),
-            ));
-          },
-          icon: const Icon(Icons.camera),
-          label: const Text('Escanear QR Code (Estabelecimentos)'),
-          iconAlignment: IconAlignment.start,
-        ),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: FutureBuilder(
+        future: loggedUser,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.data == null || snapshot.hasError) {
+            return const LoginPage();
+          }
+
+          Provider.of<AuthState>(context, listen: false)
+              .initUser(snapshot.data as UserData);
+          return AccountPage();
+        },
       ),
     );
   }
