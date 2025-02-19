@@ -1,6 +1,9 @@
-import 'package:caaso_app/common/show_dialog.dart';
+import 'dart:developer';
+
 import 'package:caaso_app/services/services.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:caaso_app/widgets/widgets.dart';
 
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
@@ -10,18 +13,80 @@ class ScanPage extends StatefulWidget {
 }
 
 class _ScanPageState extends State<ScanPage> {
-  GlobalKey key = GlobalKey();
+  Barcode? _barcode;
+  final MobileScannerController _controller = MobileScannerController(
+      formats: [BarcodeFormat.qrCode],
+      detectionSpeed: DetectionSpeed.noDuplicates);
 
-  TextEditingController controller = TextEditingController();
+  bool? isSubscribed;
+  String? displayName;
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+  Widget _buildBarcode(Barcode? value) {
+    if (value == null) {
+      return const Text(
+        'Nenhum QR Code detectado.',
+        style: TextStyle(color: Colors.white, fontSize: 20),
+      );
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        isSubscribed == true
+            ? Icon(Icons.check_circle, color: Colors.green, size: 50)
+            : Icon(Icons.close_rounded, color: Colors.red, size: 50),
+        isSubscribed == true
+            ? Text('Assinatura válida',
+                style: TextStyle(color: Colors.green, fontSize: 20))
+            : Text('Assinatura inválida',
+                style: TextStyle(color: Colors.red, fontSize: 20)),
+        if (isSubscribed != null)
+          Text(
+            '$displayName',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+        Text(
+          '${value.displayValue}',
+          overflow: TextOverflow.fade,
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+      ],
+    );
+  }
+
+  void _handleBarcode(BarcodeCapture barcodes) async {
+    if (!mounted) return;
+
+    // if no barcode detected, do nothing
+    if (barcodes.barcodes.isEmpty) return;
+
+    // if barcode is the same, do nothing
+    final currentBarcode = barcodes.barcodes.first;
+    if (_barcode == currentBarcode) return;
+
+    try {
+      log('Barcode detected: ${currentBarcode.displayValue}');
+      final data = await SubscriptionService()
+          .getSubscriptionStatus(currentBarcode.displayValue!);
+      setState(() {
+        _barcode = currentBarcode;
+        isSubscribed = data['isSubscribed'];
+        displayName = data['displayName'];
+      });
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao buscar informações do QR Code.'),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           title: Image(
@@ -35,70 +100,32 @@ class _ScanPageState extends State<ScanPage> {
           toolbarHeight: 100,
         ),
         body: SafeArea(
-          child: Center(
-            child: SizedBox(
-              width: 200,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Form(
-                      key: key,
-                      child: TextFormField(
-                        controller: controller,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: 'Número USP',
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              (value.length != 7 && value.length != 8)) {
-                            return 'Digite um número';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          if ((key.currentState as FormState).validate()) {
-                            try {
-                              final data = await SubscriptionService()
-                                  .getSubscriptionStatus(controller.text);
-
-                              final isSubscribed = data['isSubscribed'];
-                              final displayName = data['displayName'];
-                              if (!context.mounted) return;
-                              if (isSubscribed) {
-                                showSuccessDialog(
-                                  context,
-                                  'Assinatura Válida\nUsuário: $displayName',
-                                );
-                              } else {
-                                showErrorDialog(
-                                  context,
-                                  'Assinatura Inativa\nUsuário: $displayName',
-                                );
-                              }
-                            } catch (e) {
-                              showErrorDialog(
-                                context,
-                                'O número USP não foi encontrado',
-                              );
-                            }
-                          }
-                        },
-                        child: const Text('Verificar')),
-                  ),
-                ],
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: MobileScanner(
+                  controller: _controller,
+                  onDetect: _handleBarcode,
+                  onDetectError: (error, stackTrace) => ScannerErrorWidget(
+                      error: error as MobileScannerException),
+                ),
               ),
-            ),
+              const OverlayWithHole(),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: Container(
+                      height: size.height * 0.25,
+                      decoration: BoxDecoration(
+                        color:
+                            Theme.of(context).colorScheme.surfaceContainerHigh,
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      child: Center(child: _buildBarcode(_barcode)),
+                    ),
+                  )),
+            ],
           ),
         ));
   }

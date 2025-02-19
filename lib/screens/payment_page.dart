@@ -93,6 +93,9 @@ class _PaymentPageState extends State<PaymentPage> {
 
                   if (snapshot.hasData) {
                     final paymentData = snapshot.data!;
+                    if (paymentData.isPaid == true) {
+                      return const CircularProgressIndicator();
+                    }
 
                     children = <Widget>[
                       Card(

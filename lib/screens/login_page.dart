@@ -156,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                           context,
                           'Para se tornar membro, basta logar com a sua conta '
                           'google da USP e realizar o pagamento da taxa '
-                          'de inscrição');
+                          'de inscrição.');
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.secondary,
