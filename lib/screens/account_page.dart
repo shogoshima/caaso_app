@@ -100,9 +100,7 @@ class AccountPage extends StatelessWidget {
           onPressed: () async {
             await AuthService().logoutWithGoogle();
             if (!context.mounted) return;
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const LoginPage()),
-            );
+            Navigator.pop(context);
           },
           icon: const Icon(Icons.logout),
           label: const Text('Logout'),

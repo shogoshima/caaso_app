@@ -13,7 +13,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   ApiService.initialize(
-      'https://dbc1-2804-1b2-f144-6be7-c031-105a-82bf-d418.ngrok-free.app');
+      'https://codelab.icmc.usp.br/go');
   AuthService();
   BenefitService();
   PaymentService();

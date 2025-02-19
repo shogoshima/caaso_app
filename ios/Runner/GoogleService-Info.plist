@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>425041072425-o9btg72e46at9b7i9gi7lds5bgjh42hb.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.425041072425-o9btg72e46at9b7i9gi7lds5bgjh42hb</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>425041072425-m858b48svq195f54l7vv10sf90fephfa.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDarBrQmek-ms859ah9d4yH7KscxaQoq6o</string>
+	<key>GCM_SENDER_ID</key>
+	<string>425041072425</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.caasoApp</string>
+	<key>PROJECT_ID</key>
+	<string>caaso-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>caaso-app.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:425041072425:ios:dfdfb64ce96a1fa3f6e738</string>
+</dict>
+</plist>
