@@ -1,4 +1,4 @@
-package com.example.caaso_app
+package com.codelab.sociocaaso
 
 import io.flutter.embedding.android.FlutterActivity
 
