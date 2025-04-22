@@ -1,0 +1,1 @@
+/home/shogo/Documents/github/caaso_app/build/app/intermediates/cxx/Debug/22p3g3t6/obj/arm64-v8a

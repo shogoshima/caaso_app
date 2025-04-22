@@ -1,0 +1,1 @@
+/home/shogo/Documents/github/caaso_app/build/app/intermediates/cxx/RelWithDebInfo/2e285d5n/obj/x86
