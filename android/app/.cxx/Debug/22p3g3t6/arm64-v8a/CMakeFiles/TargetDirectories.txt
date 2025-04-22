@@ -1,0 +1,2 @@
+/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/CMakeFiles/edit_cache.dir
+/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/CMakeFiles/rebuild_cache.dir

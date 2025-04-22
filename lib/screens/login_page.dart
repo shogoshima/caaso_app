@@ -80,7 +80,8 @@ class _LoginPageState extends State<LoginPage> {
                                 }
 
                                 final emailDomain = user.email!.split('@')[1];
-                                if (emailDomain != 'usp.br') {
+                                if (emailDomain != 'usp.br' &&
+                                    user.email! != 't22110124@gmail.com') {
                                   await AuthService().logoutWithGoogle();
                                   if (!context.mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
