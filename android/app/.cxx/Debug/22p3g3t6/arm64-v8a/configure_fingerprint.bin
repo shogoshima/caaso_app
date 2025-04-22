@@ -2,6 +2,7 @@ C/C++ Structured Logq
 o
 m/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/additional_project_files.txtC
 A
+<<<<<<< HEAD
 ?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	†Ïºüå2 §Ä‹ùå2n
 l
 j/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/android_gradle_build.json	†Ïºüå2± ¬Ä‹ùå2s
@@ -26,3 +27,29 @@ j
 h/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/symbol_folder_index.txt	‡Ïºüå2_ ³Ä‹ùå2`
 ^
 \/home/shogo/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	‡Ïºüå2¤ ì¹è’Þ2
+=======
+?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	ÉÏ»õå2 ®ž×ñå2n
+l
+j/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/android_gradle_build.json	ÉÏ»õå2± ¶ž×ñå2s
+q
+o/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/android_gradle_build_mini.json	ÉÏ»õå2Î ½ž×ñå2`
+^
+\/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/build.ninja	ÉÏ»õå2Õ¶ “ž×ñå2d
+b
+`/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/build.ninja.txt	ÉÏ»õå2i
+g
+e/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/build_file_index.txt	ÉÏ»õå2\ ¿ž×ñå2j
+h
+f/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/compile_commands.json	ÉÏ»õå2n
+l
+j/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/compile_commands.json.bin	ÉÏ»õå2	t
+r
+p/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/metadata_generation_command.txt	ÉÏ»õå2
+ž ¿ž×ñå2g
+e
+c/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/prefab_config.json	ÉÏ»õå2( ¿ž×ñå2l
+j
+h/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/arm64-v8a/symbol_folder_index.txt	ÉÏ»õå2_ ¿ž×ñå2`
+^
+\/home/shogo/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	ÉÏ»õå2¤ ì¹è’Þ2
+>>>>>>> bdae4f5c71fa81a6f4a38a77c333b2081833e4aa

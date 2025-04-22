@@ -2,6 +2,7 @@ C/C++ Structured Logs
 q
 o/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/additional_project_files.txtC
 A
+<<<<<<< HEAD
 ?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	šÏºüå2 ÔÉ‹ùå2p
 n
 l/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/android_gradle_build.json	šÏºüå2µ ×É‹ùå2u
@@ -26,3 +27,29 @@ l
 j/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/symbol_folder_index.txt	šÏºüå2a ÙÉ‹ùå2`
 ^
 \/home/shogo/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	šÏºüå2¤ ì¹è’Þ2
+=======
+?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	ÓÏ»õå2 °®×ñå2p
+n
+l/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/android_gradle_build.json	ÓÏ»õå2µ ²®×ñå2u
+s
+q/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/android_gradle_build_mini.json	ÓÏ»õå2Ò ´®×ñå2b
+`
+^/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/build.ninja	ÓÏ»õå2ß¶ ®×ñå2f
+d
+b/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/build.ninja.txt	ÓÏ»õå2k
+i
+g/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/build_file_index.txt	ÓÏ»õå2\ ´®×ñå2l
+j
+h/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/compile_commands.json	ÓÏ»õå2p
+n
+l/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/compile_commands.json.bin	ÓÏ»õå2	v
+t
+r/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/metadata_generation_command.txt	ÓÏ»õå2
+¨ ´®×ñå2i
+g
+e/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/prefab_config.json	ÓÏ»õå2( ´®×ñå2n
+l
+j/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/armeabi-v7a/symbol_folder_index.txt	ÓÏ»õå2a ´®×ñå2`
+^
+\/home/shogo/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	ÓÏ»õå2¤ ì¹è’Þ2
+>>>>>>> bdae4f5c71fa81a6f4a38a77c333b2081833e4aa
