@@ -74,7 +74,7 @@ class _AboutPageState extends State<AboutPage> {
           ),
           const SizedBox(height: 20.0),
           Text(
-            'Feito com ❤️ (e 5 dias) por',
+            'Feito com ❤️ (e 5+ dias) por',
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 10.0),

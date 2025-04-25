@@ -12,7 +12,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  ApiService.initialize('https://codelab.icmc.usp.br/go');
+  ApiService.initialize(
+      'https://codelab.icmc.usp.br/go');
   AuthService();
   BenefitService();
   PaymentService();

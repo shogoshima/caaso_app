@@ -2,54 +2,27 @@ C/C++ Structured Logk
 i
 g/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/additional_project_files.txtC
 A
-<<<<<<< HEAD
-?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	§Ïºüå2 ÔÎ‹ùå2h
+?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	Ü†çæ2 ì¢·Àæ2h
 f
-d/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/android_gradle_build.json	§Ïºüå2¥ ÖÎ‹ùå2m
+d/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/android_gradle_build.json	Ü†çæ2¥ î¢·Àæ2m
 k
-i/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/android_gradle_build_mini.json	§Ïºüå2Â ŞÎ‹ùå2Z
+i/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/android_gradle_build_mini.json	Ü†çæ2Â ğ¢·Àæ2Z
 X
-V/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/build.ninja	§Ïºüå2·¶ ½Î‹ùå2^
+V/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/build.ninja	Ü†çæ2·¶ Û¢·Àæ2^
 \
-Z/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/build.ninja.txt	§Ïºüå2c
+Z/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/build.ninja.txt	Ü†çæ2c
 a
-_/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/build_file_index.txt	§Ïºüå2\ ßÎ‹ùå2d
+_/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/build_file_index.txt	Ü†çæ2\ ğ¢·Àæ2d
 b
-`/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/compile_commands.json	§Ïºüå2h
+`/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/compile_commands.json	Ü†çæ2h
 f
-d/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/compile_commands.json.bin	§Ïºüå2	n
+d/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/compile_commands.json.bin	Ü†çæ2	n
 l
-j/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/metadata_generation_command.txt	§Ïºüå2
-€ ßÎ‹ùå2a
+j/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/metadata_generation_command.txt	Ü†çæ2
+€ ğ¢·Àæ2a
 _
-]/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/prefab_config.json	§Ïºüå2( ßÎ‹ùå2f
+]/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/prefab_config.json	Ü†çæ2( ğ¢·Àæ2f
 d
-b/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/symbol_folder_index.txt	§Ïºüå2Y ßÎ‹ùå2`
+b/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/symbol_folder_index.txt	Ü†çæ2Y ğ¢·Àæ2`
 ^
-\/home/shogo/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	§Ïºüå2¤ ì¹è’Ş2
-=======
-?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	ÛÏ»õå2 ±×ñå2h
-f
-d/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/android_gradle_build.json	ÛÏ»õå2¥ Ÿ±×ñå2m
-k
-i/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/android_gradle_build_mini.json	ÛÏ»õå2Â ¡±×ñå2Z
-X
-V/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/build.ninja	ÛÏ»õå2·¶ Š±×ñå2^
-\
-Z/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/build.ninja.txt	ÛÏ»õå2c
-a
-_/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/build_file_index.txt	ÛÏ»õå2\ ¡±×ñå2d
-b
-`/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/compile_commands.json	ÛÏ»õå2h
-f
-d/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/compile_commands.json.bin	ÛÏ»õå2	n
-l
-j/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/metadata_generation_command.txt	ÛÏ»õå2
-€ ¡±×ñå2a
-_
-]/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/prefab_config.json	ÛÏ»õå2( ¡±×ñå2f
-d
-b/home/shogo/Documents/github/caaso_app/android/app/.cxx/Debug/22p3g3t6/x86/symbol_folder_index.txt	ÛÏ»õå2Y ¡±×ñå2`
-^
-\/home/shogo/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	ÛÏ»õå2¤ ì¹è’Ş2
->>>>>>> bdae4f5c71fa81a6f4a38a77c333b2081833e4aa
+\/home/shogo/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	Ü†çæ2¤ ì¹è’Ş2

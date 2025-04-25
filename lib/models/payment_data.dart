@@ -1,5 +1,5 @@
 class PaymentData {
-  final String id;
+  final int id;
   final String? qrCode;
   final double? amount;
   final bool? isPaid;
