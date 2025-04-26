@@ -79,62 +79,58 @@ class _LoginPageState extends State<LoginPage> {
                                   return;
                                 }
 
-                                final emailDomain = user.email!.split('@')[1];
-                                if (emailDomain != 'usp.br' &&
-                                    user.email! != 't22110124@gmail.com') {
-                                  await AuthService().logoutWithGoogle();
-                                  if (!context.mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Apenas e-mails USP são permitidos'),
-                                    ),
-                                  );
-                                  return;
-                                }
+                                // final emailDomain = user.email!.split('@')[1];
+                                // if (emailDomain != 'usp.br' &&
+                                //     user.email! != 't22110124@gmail.com') {
+                                //   await AuthService().logoutWithGoogle();
+                                //   if (!context.mounted) return;
+                                //   ScaffoldMessenger.of(context).showSnackBar(
+                                //     const SnackBar(
+                                //       content: Text(
+                                //           'Apenas e-mails USP são permitidos'),
+                                //     ),
+                                //   );
+                                //   return;
+                                // }
 
                                 final idToken = await user.getIdToken();
                                 final userData =
                                     await AuthService().login(idToken!);
 
-                                log(userData.toString());
+                                log(userData.id);
 
                                 auth.saveUser(userData);
 
                                 if (!context.mounted) return;
                                 if (userData.nusp == "") {
-                                  showInputDialog(context, 'Bem Vinde!',
-                                      'Como é a sua primeira vez, pedimos que nos informe o seu número USP.',
-                                      (nusp) async {
-                                    final data = UserData(
-                                      id: user.uid,
-                                      nusp: nusp,
-                                      displayName: user.displayName,
-                                      email: user.email,
-                                      photoUrl: user.photoURL,
-                                    );
+                                  final data = UserData(
+                                    id: user.uid,
+                                    nusp: user.uid,
+                                    displayName: user.displayName,
+                                    email: user.email,
+                                    photoUrl: user.photoURL,
+                                  );
 
-                                    try {
-                                      UserData newUserData = await AuthService()
-                                          .create(data, idToken);
-                                      auth.saveUser(newUserData);
-                                      if (!context.mounted) return;
-                                    } catch (e) {
-                                      showErrorDialog(context, e.toString());
-                                    }
+                                  try {
+                                    UserData newUserData = await AuthService()
+                                        .create(data, idToken);
+                                    auth.saveUser(newUserData);
+                                    if (!context.mounted) return;
+                                  } catch (e) {
+                                    showErrorDialog(context, e.toString());
+                                  }
 
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                            'Login realizado com sucesso!'),
-                                      ),
-                                    );
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const AccountPage()),
-                                    );
-                                  });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Login realizado com sucesso!'),
+                                    ),
+                                  );
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const AccountPage()),
+                                  );
                                 } else {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(

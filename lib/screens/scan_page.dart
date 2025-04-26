@@ -20,6 +20,8 @@ class _ScanPageState extends State<ScanPage> {
 
   bool? isSubscribed;
   String? displayName;
+  String? photoUrl;
+  String? type;
 
   Widget _buildBarcode(Barcode? value) {
     if (value == null) {
@@ -40,15 +42,24 @@ class _ScanPageState extends State<ScanPage> {
                 style: TextStyle(color: Colors.green, fontSize: 20))
             : Text('Assinatura inválida',
                 style: TextStyle(color: Colors.red, fontSize: 20)),
-        if (isSubscribed != null)
-          Text(
-            '$displayName',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineSmall,
+        Container(
+          height: 100,
+          clipBehavior: Clip.antiAlias,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
+          child: Image(
+            image: Image.network(photoUrl ?? '').image,
+          ),
+        ),
         Text(
-          '${value.displayValue}',
-          overflow: TextOverflow.fade,
+          '$displayName',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        Text(
+          '$type',
+          textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ],
@@ -73,6 +84,8 @@ class _ScanPageState extends State<ScanPage> {
         _barcode = currentBarcode;
         isSubscribed = data['isSubscribed'];
         displayName = data['displayName'];
+        photoUrl = data['photoUrl'];
+        type = data['type'];
       });
     } catch (e) {
       if (!mounted) return;

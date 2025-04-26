@@ -3,6 +3,7 @@ class UserData {
   final String? nusp;
   final String? displayName;
   final String? email;
+  final String? type;
   final String? photoUrl;
   final bool? isSubscribed;
   final DateTime? expirationDate;
@@ -13,6 +14,7 @@ class UserData {
     this.nusp,
     this.displayName,
     this.email,
+    this.type,
     this.photoUrl,
     this.isSubscribed,
     this.expirationDate,
@@ -25,6 +27,7 @@ class UserData {
       nusp: json['nusp'],
       displayName: json['displayName'],
       email: json['email'],
+      type: json['type'],
       photoUrl: json['photoUrl'],
       isSubscribed: json['isSubscribed'],
       expirationDate: DateTime.parse(json['expirationDate']),

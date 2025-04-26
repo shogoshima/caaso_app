@@ -61,8 +61,9 @@ class AccountPage extends StatelessWidget {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) => MembershipPage(
+                                          userId: auth.user?.id,
                                           name: auth.user?.displayName,
-                                          userId: auth.user?.nusp,
+                                          type: auth.user?.type,
                                           profilePhotoUrl: auth.user?.photoUrl,
                                           validUntil:
                                               auth.user?.expirationDate)),
