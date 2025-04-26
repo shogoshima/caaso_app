@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:caaso_app/main.dart';
-import 'package:caaso_app/models/user_data.dart';
 import 'package:caaso_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.all(32),
               child: Column(
                 children: <Widget>[
-                  Text('Sócio CAASO',
+                  Text('Sócio\nCAASO',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.displayLarge),
                   const SizedBox(height: 30.0),
@@ -102,42 +101,11 @@ class _LoginPageState extends State<LoginPage> {
                                 auth.saveUser(userData);
 
                                 if (!context.mounted) return;
-                                if (userData.nusp == "") {
-                                  final data = UserData(
-                                    id: user.uid,
-                                    nusp: user.uid,
-                                    displayName: user.displayName,
-                                    email: user.email,
-                                    photoUrl: user.photoURL,
-                                  );
-
-                                  try {
-                                    UserData newUserData = await AuthService()
-                                        .create(data, idToken);
-                                    auth.saveUser(newUserData);
-                                    if (!context.mounted) return;
-                                  } catch (e) {
-                                    showErrorDialog(context, e.toString());
-                                  }
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text('Login realizado com sucesso!'),
-                                    ),
-                                  );
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const AccountPage()),
-                                  );
-                                } else {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const AccountPage()),
-                                  );
-                                }
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AccountPage()),
+                                );
                               } catch (e) {
                                 log(e.toString());
                                 showErrorDialog(context,

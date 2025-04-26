@@ -61,7 +61,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 );
               }
 
-              if (auth.user!.isSubscribed!) {
+              if (auth.user!.isSubscribed) {
                 return _buildActivePlanUI();
               }
 

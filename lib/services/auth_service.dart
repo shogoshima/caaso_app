@@ -20,7 +20,7 @@ class AuthService {
     if (token == null) {
       throw Exception("Not logged in");
     }
-    final data = await ApiService().get('/user/profile', token);
+    final data = await ApiService().get('/auth/profile', token);
     return UserData.fromJson(data['user']);
   }
 
@@ -46,15 +46,9 @@ class AuthService {
   }
 
   Future<UserData> login(String idToken) async {
-    final data = await ApiService().post('/user/login', {}, idToken);
+    final data = await ApiService().post('/login', {}, idToken);
     SecureStorage storage = SecureStorage();
     await storage.setAccessToken(data['token']);
-    return UserData.fromJson(data['user']);
-  }
-
-  Future<UserData> create(UserData userData, String idToken) async {
-    final data =
-        await ApiService().post('/user/create', userData.toJson(), idToken);
     return UserData.fromJson(data['user']);
   }
 

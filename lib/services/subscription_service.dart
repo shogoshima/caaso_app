@@ -9,8 +9,8 @@ class SubscriptionService {
     return _instance;
   }
 
-  Future<dynamic> getSubscriptionStatus(String nusp) async {
-    final data = await ApiService().get('/subscription/$nusp');
+  Future<dynamic> getSubscriptionStatus(String token) async {
+    final data = await ApiService().get('/subscription/$token');
     return data;
   }
 }

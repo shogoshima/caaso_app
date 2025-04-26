@@ -44,7 +44,7 @@ class AccountPage extends StatelessWidget {
 
                 return Column(
                   children: [
-                    Text('Olá, ${auth.user?.displayName?.split(' ')[0]}!',
+                    Text('Olá, ${auth.user?.displayName.split(' ')[0]}!',
                         style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 15.0),
                     Text(
@@ -61,7 +61,7 @@ class AccountPage extends StatelessWidget {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) => MembershipPage(
-                                          nusp: auth.user?.nusp,
+                                          token: auth.user?.token,
                                           name: auth.user?.displayName,
                                           type: auth.user?.type,
                                           profilePhotoUrl: auth.user?.photoUrl,

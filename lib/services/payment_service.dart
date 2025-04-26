@@ -21,7 +21,7 @@ class PaymentService {
       'planType': planType.index,
     };
 
-    final data = await ApiService().post('/payment/create', qrData, token);
+    final data = await ApiService().post('/auth/payment/create', qrData, token);
 
     return PaymentData.fromJson(data['payment']);
   }
@@ -30,7 +30,7 @@ class PaymentService {
     SecureStorage storage = SecureStorage();
     String? token = await storage.getAccessToken();
 
-    final data = await ApiService().get('/payment', token);
+    final data = await ApiService().get('/auth/payment', token);
 
     return PaymentData.fromJson(data['payment']);
   }
