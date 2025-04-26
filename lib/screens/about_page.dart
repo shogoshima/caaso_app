@@ -69,8 +69,8 @@ class _AboutPageState extends State<AboutPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Caaso App',
-            style: Theme.of(context).textTheme.displayMedium,
+            'App Sócio CAASO',
+            style: Theme.of(context).textTheme.displaySmall,
           ),
           const SizedBox(height: 20.0),
           Text(

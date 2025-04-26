@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.all(32),
               child: Column(
                 children: <Widget>[
-                  Text('SÓCIO CAASO',
+                  Text('Sócio CAASO',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.displayLarge),
                   const SizedBox(height: 30.0),
@@ -152,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                       showInfoDialog(
                           context,
                           'Para se tornar membro, basta logar com a sua conta '
-                          'google da USP e realizar o pagamento da taxa '
+                          'Google e realizar o pagamento da taxa '
                           'de inscrição.');
                     },
                     style: TextButton.styleFrom(

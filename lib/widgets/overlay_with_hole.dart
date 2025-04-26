@@ -6,10 +6,10 @@ class OverlayWithHole extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final squareSize = size.width * 0.8;
+    final squareSize = size.height * 0.35;
     final holeRect = Rect.fromLTWH(
       (size.width - squareSize) / 2,
-      (size.height - squareSize) / 10,
+      (size.height - squareSize) / 15,
       squareSize,
       squareSize,
     );

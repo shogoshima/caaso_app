@@ -20,10 +20,10 @@ final theme = ThemeData(
           fontWeight: FontWeight.bold, color: Colors.yellow.shade700),
       displaySmall: GoogleFonts.lato(
           fontWeight: FontWeight.bold, color: Colors.yellow.shade700),
-      titleLarge:
-          GoogleFonts.oswald(fontWeight: FontWeight.bold, color: Colors.white),
+      titleLarge: GoogleFonts.oswald(
+          fontWeight: FontWeight.bold, color: Colors.white, fontSize: 25),
       titleMedium: GoogleFonts.oswald(
-          fontWeight: FontWeight.bold, color: Colors.white70),
+          fontWeight: FontWeight.bold, color: Colors.white70, fontSize: 20),
       titleSmall: GoogleFonts.oswald(
           fontWeight: FontWeight.bold, color: Colors.white54),
     ));

@@ -3,7 +3,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 class MembershipPage extends StatelessWidget {
   final String? name;
-  final String? userId;
+  final String? nusp;
   final String? type;
   final String? profilePhotoUrl;
   final DateTime? validUntil;
@@ -11,7 +11,7 @@ class MembershipPage extends StatelessWidget {
   const MembershipPage(
       {super.key,
       this.name,
-      this.userId,
+      this.nusp,
       this.type,
       this.profilePhotoUrl,
       this.validUntil});
@@ -61,14 +61,14 @@ class MembershipPage extends StatelessWidget {
                       ),
                       Text(
                         type ?? 'Nenhum',
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Card(
                         color: Theme.of(context).colorScheme.onSurface,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: QrImageView(
-                            data: userId ?? '',
+                            data: nusp ?? '',
                             version: QrVersions.auto,
                             size: 250.0,
                           ),

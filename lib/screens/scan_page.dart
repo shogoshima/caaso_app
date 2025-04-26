@@ -34,23 +34,9 @@ class _ScanPageState extends State<ScanPage> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        isSubscribed == true
-            ? Icon(Icons.check_circle, color: Colors.green, size: 50)
-            : Icon(Icons.close_rounded, color: Colors.red, size: 50),
-        isSubscribed == true
-            ? Text('Assinatura válida',
-                style: TextStyle(color: Colors.green, fontSize: 20))
-            : Text('Assinatura inválida',
-                style: TextStyle(color: Colors.red, fontSize: 20)),
-        Container(
-          height: 100,
-          clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Image(
-            image: Image.network(photoUrl ?? '').image,
-          ),
+        CircleAvatar(
+          foregroundImage: Image.network(photoUrl ?? '').image,
+          radius: 30,
         ),
         Text(
           '$displayName',
@@ -60,8 +46,19 @@ class _ScanPageState extends State<ScanPage> {
         Text(
           '$type',
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
+        SizedBox(
+          height: 20,
+        ),
+        isSubscribed == true
+            ? Icon(Icons.check_circle, color: Colors.green, size: 50)
+            : Icon(Icons.close_rounded, color: Colors.red, size: 50),
+        isSubscribed == true
+            ? Text('Assinatura válida',
+                style: TextStyle(color: Colors.green, fontSize: 20))
+            : Text('Assinatura inválida',
+                style: TextStyle(color: Colors.red, fontSize: 20)),
       ],
     );
   }
@@ -129,7 +126,7 @@ class _ScanPageState extends State<ScanPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(30.0),
                     child: Container(
-                      height: size.height * 0.25,
+                      height: size.height * 0.30,
                       decoration: BoxDecoration(
                         color:
                             Theme.of(context).colorScheme.surfaceContainerHigh,
