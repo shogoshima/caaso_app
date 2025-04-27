@@ -52,7 +52,7 @@ class AccountPage extends StatelessWidget {
                             ? 'Sua assinatura é válida até \n ${auth.user?.expirationDate?.day}/${auth.user?.expirationDate?.month}/${auth.user?.expirationDate?.year}'
                             : 'Você não possui uma assinatura ativa',
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.titleMedium),
+                        style: Theme.of(context).textTheme.titleSmall),
                     const SizedBox(height: 30.0),
                     OutlinedButton(
                         onPressed: auth.user?.isSubscribed == false

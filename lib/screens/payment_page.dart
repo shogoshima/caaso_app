@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:caaso_app/services/plan_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,6 @@ import 'package:caaso_app/common/currency_formatter.dart';
 import 'package:caaso_app/common/show_dialog.dart';
 import 'package:caaso_app/main.dart';
 import 'package:caaso_app/models/models.dart';
-import 'package:caaso_app/models/prices.dart';
 import 'package:caaso_app/services/services.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -20,12 +20,15 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
+  bool _isLoadingQRCode = false;
+
   final TextEditingController userController = TextEditingController();
   final TextEditingController planController = TextEditingController();
-  UserType? selectedUser;
-  PlanType? selectedPlan;
+  String? selectedUser;
+  String? selectedPlan;
 
   Future<PaymentData>? currentPayment;
+  Future<Map<String, Map<String, double>>>? priceMap;
 
   @override
   void initState() {
@@ -39,8 +42,10 @@ class _PaymentPageState extends State<PaymentPage> {
   Future<PaymentData> _refreshPaymentData() async {
     log('Refreshing payment data');
     final newPayment = PaymentService().getPayment();
+    final plans = PlanService().fetchPlans();
     setState(() {
       currentPayment = newPayment;
+      priceMap = plans;
     });
     return await newPayment;
   }
@@ -229,84 +234,119 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   Widget _buildPlanSelectionUI() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Selecione as opções:',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        const SizedBox(height: 20),
-        DropdownMenu<UserType>(
-          controller: userController,
-          label: const Text('Tipo de Usuário'),
-          onSelected: (user) {
-            setState(() {
-              selectedUser = user;
-            });
-          },
-          dropdownMenuEntries: UserType.values.map((user) {
-            return DropdownMenuEntry<UserType>(
-              value: user,
-              label: user.value,
-            );
-          }).toList(),
-        ),
-        const SizedBox(height: 15),
-        DropdownMenu<PlanType>(
-          controller: planController,
-          label: const Text('Plano'),
-          onSelected: (plan) {
-            setState(() {
-              selectedPlan = plan;
-            });
-          },
-          dropdownMenuEntries: PlanType.values.map((plan) {
-            return DropdownMenuEntry<PlanType>(
-              value: plan,
-              label: plan.value,
-              trailingIcon: selectedUser == null
-                  ? null
-                  : Text(
-                      currencyFormatter.format(getPrices(selectedUser)(plan)),
-                    ),
-            );
-          }).toList(),
-        ),
-        const SizedBox(height: 20),
-        if (selectedUser != null && selectedPlan != null) ...[
-          Text(
-            currencyFormatter.format(
-              getPrices(selectedUser)(selectedPlan),
+    return FutureBuilder<Map<String, Map<String, double>>>(
+      future: priceMap,
+      builder: (context, snapMap) {
+        final isLoadingMap = snapMap.connectionState == ConnectionState.waiting;
+        final hasMapError = snapMap.hasError || !snapMap.hasData;
+        // Enquanto carrega ou deu erro, exibe loading ou mensagem simples:
+        if (isLoadingMap) {
+          return const CircularProgressIndicator();
+        }
+        if (hasMapError) {
+          return const Text('Erro ao carregar preços');
+        }
+
+        // Temos o mapa de preços aqui:
+        final prices = snapMap.data!;
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Selecione as opções:',
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 20),
-          OutlinedButton(
-            onPressed: () async {
-              try {
-                await PaymentService().createPayment(
-                  selectedUser!,
-                  selectedPlan!,
-                );
+            const SizedBox(height: 20),
+            // Dropdown de usuário (string)
+            DropdownMenu<String>(
+              controller: userController,
+              label: const Text('Tipo de Usuário'),
+              onSelected: (user) {
                 setState(() {
-                  currentPayment = _refreshPaymentData();
+                  selectedUser = user;
+                  // reseta plano ao mudar usuário
+                  selectedPlan = null;
+                  planController.clear();
                 });
-              } catch (e) {
-                if (!mounted) return;
-                showErrorDialog(context, e.toString());
-              }
-            },
-            child: const Text('Criar QR Code'),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'O plano é sujeito a cancelamento caso \nvocê não seja do tipo especificado',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-        ],
-      ],
+              },
+              dropdownMenuEntries:
+                  ['Alojamento', 'Graduação', 'Pós-Graduação', 'Outros']
+                      .map((user) => DropdownMenuEntry<String>(
+                            value: user,
+                            label: user,
+                          ))
+                      .toList(),
+            ),
+            const SizedBox(height: 15),
+            // Dropdown de plano (string)
+            DropdownMenu<String>(
+              controller: planController,
+              enabled: selectedUser != null,
+              label: const Text('Plano'),
+              onSelected: (plan) {
+                setState(() {
+                  selectedPlan = plan;
+                });
+              },
+              dropdownMenuEntries: ['Mensal', 'Anual'].map((plan) {
+                // cria a função lookup só se usuário já estiver selecionado
+                final lookup = selectedUser == null
+                    ? (_) => null
+                    : getPrices(selectedUser!, prices);
+                final price = lookup(plan);
+                return DropdownMenuEntry<String>(
+                  value: plan,
+                  label: plan,
+                  trailingIcon: price == null
+                      ? null
+                      : Text(currencyFormatter.format(price)),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 20),
+            if (selectedUser != null && selectedPlan != null) ...[
+              // mostra o preço grande
+              Text(
+                currencyFormatter.format(
+                  getPrices(selectedUser!, prices)(selectedPlan!),
+                ),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 20),
+              OutlinedButton(
+                onPressed: _isLoadingQRCode
+                    ? null
+                    : () async {
+                        if (_isLoadingQRCode) return;
+                        setState(() => _isLoadingQRCode = true);
+                        try {
+                          await PaymentService().createPayment(
+                            selectedUser!,
+                            selectedPlan!,
+                          );
+                          setState(() {
+                            currentPayment = _refreshPaymentData();
+                          });
+                        } catch (e) {
+                          if (!context.mounted) return;
+                          showErrorDialog(context, e.toString());
+                        } finally {
+                          setState(() => _isLoadingQRCode = false);
+                        }
+                      },
+                child: const Text('Criar QR Code'),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'O plano é sujeito a cancelamento caso \nvocê não seja do tipo especificado',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 }

@@ -38,6 +38,9 @@ class _ScanPageState extends State<ScanPage> {
           foregroundImage: Image.network(photoUrl ?? '').image,
           radius: 30,
         ),
+        SizedBox(
+          height: 4,
+        ),
         Text(
           '$displayName',
           textAlign: TextAlign.center,

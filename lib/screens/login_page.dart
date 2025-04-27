@@ -78,20 +78,6 @@ class _LoginPageState extends State<LoginPage> {
                                   return;
                                 }
 
-                                // final emailDomain = user.email!.split('@')[1];
-                                // if (emailDomain != 'usp.br' &&
-                                //     user.email! != 't22110124@gmail.com') {
-                                //   await AuthService().logoutWithGoogle();
-                                //   if (!context.mounted) return;
-                                //   ScaffoldMessenger.of(context).showSnackBar(
-                                //     const SnackBar(
-                                //       content: Text(
-                                //           'Apenas e-mails USP são permitidos'),
-                                //     ),
-                                //   );
-                                //   return;
-                                // }
-
                                 final idToken = await user.getIdToken();
                                 final userData =
                                     await AuthService().login(idToken!);

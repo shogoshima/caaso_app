@@ -11,14 +11,13 @@ class PaymentService {
     return _instance;
   }
 
-  Future<PaymentData> createPayment(
-      UserType userType, PlanType planType) async {
+  Future<PaymentData> createPayment(String userType, String planType) async {
     SecureStorage storage = SecureStorage();
     String? token = await storage.getAccessToken();
 
     final qrData = {
-      'userType': userType.index,
-      'planType': planType.index,
+      'userType': userType,
+      'planType': planType,
     };
 
     final data = await ApiService().post('/auth/payment/create', qrData, token);

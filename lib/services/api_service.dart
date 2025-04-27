@@ -48,7 +48,7 @@ class ApiService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return json;
     } else {
-      throw Exception('[Error ${response.statusCode}] ${json['message']}');
+      throw Exception('${json['message']}');
     }
   }
 }
