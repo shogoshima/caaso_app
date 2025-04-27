@@ -261,7 +261,7 @@ class _PaymentPageState extends State<PaymentPage> {
             // Dropdown de usuário (string)
             DropdownMenu<String>(
               controller: userController,
-              label: const Text('Tipo de Usuário'),
+              label: const Text('Usuário'),
               onSelected: (user) {
                 setState(() {
                   selectedUser = user;

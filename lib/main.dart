@@ -14,7 +14,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  ApiService.initialize('https://9794-2804-1b3-a300-b249-e51d-6e82-b225-c2a.ngrok-free.app/go');
+  ApiService.initialize('https://codelab.icmc.usp.br/go');
   AuthService();
   BenefitService();
   PlanService();
