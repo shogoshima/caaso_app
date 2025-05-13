@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -22,21 +24,24 @@ class ApiService {
     _baseUrl = baseUrl;
   }
 
-  Future<dynamic> get(String endpoint, [String? token]) async {
+  Future<dynamic> get(String endpoint) async {
+    final idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
+
     final response = await http.get(
       Uri.parse('$_baseUrl$endpoint'),
-      headers: token != null ? {'Authorization': 'Bearer $token'} : {},
+      headers: idToken != null ? {'Authorization': 'Bearer $idToken'} : {},
     );
     return _handleResponse(response);
   }
 
-  Future<dynamic> post(String endpoint, Map<String, dynamic> data,
-      [String? token]) async {
+  Future<dynamic> post(String endpoint, Map<String, dynamic> data) async {
+    final idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
+
     final response = await http.post(
       Uri.parse('$_baseUrl$endpoint'),
       headers: {
         'Content-Type': 'application/json',
-        if (token != null) 'Authorization': 'Bearer $token'
+        if (idToken != null) 'Authorization': 'Bearer $idToken'
       },
       body: jsonEncode(data),
     );
@@ -45,6 +50,7 @@ class ApiService {
 
   dynamic _handleResponse(http.Response response) {
     final json = jsonDecode(response.body);
+    log(json.toString());
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return json;
     } else {

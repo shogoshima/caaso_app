@@ -1,4 +1,5 @@
 import 'package:caaso_app/services/plan_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'screens/screens.dart';
 import 'services/services.dart';
@@ -14,7 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  ApiService.initialize('https://codelab.icmc.usp.br/go');
+  ApiService.initialize('http://10.0.2.2:3001/go');
   AuthService();
   BenefitService();
   PlanService();
@@ -40,54 +41,38 @@ class MyApp extends StatelessWidget {
 }
 
 class AuthState extends ChangeNotifier {
-  late UserData? user;
-
-  void initUser(UserData userData) {
-    user = userData;
-  }
+  UserData? user;
 
   void saveUser(UserData userData) {
     user = userData;
-    notifyListeners();
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  Future<UserData>? loggedUser;
-
-  @override
-  void initState() {
-    super.initState();
-    loggedUser = AuthService().getUser();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: FutureBuilder(
-        future: loggedUser,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        // Enquanto aguarda a primeira emissão, exibe um loading
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
 
-          if (snapshot.data == null || snapshot.hasError) {
-            return const LoginPage();
-          }
+        // Se houver um usuário logado, vai para AccountPage
+        if (snapshot.hasData &&
+            snapshot.data != null &&
+            snapshot.data!.emailVerified) {
+          return const AccountPage();
+        }
 
-          Provider.of<AuthState>(context, listen: false)
-              .initUser(snapshot.data as UserData);
-          return AccountPage();
-        },
-      ),
+        // Caso contrário, vai para LoginPage
+        return const LoginPage();
+      },
     );
   }
 }

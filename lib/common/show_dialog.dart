@@ -61,61 +61,80 @@ Future<void> showInfoDialog(BuildContext context, String content) async {
   );
 }
 
-Future<void> showInputDialog(BuildContext context, String title, String content,
-    Function(String) onConfirm) async {
-  GlobalKey key = GlobalKey();
-  final TextEditingController controller = TextEditingController();
+Future<void> showResendVerificationDialog(
+    BuildContext context, String content, Function() onConfirm) {
   return showDialog<void>(
-    barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(title, style: Theme.of(context).textTheme.titleLarge),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(content),
-            Form(
-              key: key,
-              child: TextFormField(
-                controller: controller,
-                keyboardType: TextInputType.number,
+        title: Text('Verificação de e-mail',
+            style: Theme.of(context).textTheme.titleLarge),
+        content: Text(content),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancelar'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Reenviar'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              onConfirm();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> showSendPasswordResetEmailDialog(BuildContext context,
+    String content, TextEditingController emailController, Function onConfirm) {
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Recuperação de senha',
+            style: Theme.of(context).textTheme.titleLarge),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(content),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: emailController,
                 decoration: const InputDecoration(
-                  labelText: 'Digite aqui',
+                  labelText: 'E-mail',
                 ),
                 validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      (value.length != 7 && value.length != 8)) {
-                    return 'Por favor, digite um número USP válido';
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira seu e-mail.';
                   }
                   return null;
                 },
               ),
-            ),
-          ],
-        ),
-        actions: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment
-                .spaceBetween, // Distribute space between buttons
-            children: <Widget>[
-              TextButton(
-                child: const Text('Cancelar'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              TextButton(
-                child: const Text('Confirmar'),
-                onPressed: () async {
-                  if ((key.currentState as FormState).validate()) {
-                    Navigator.of(context).pop(); // Close the dialog
-                    onConfirm(controller.text); // Trigger the callback
-                  }
-                },
-              ),
             ],
           ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancelar'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Enviar'),
+            onPressed: () async {
+              Navigator.of(context).pop();
+              onConfirm();
+            },
+          )
         ],
       );
     },

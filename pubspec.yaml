@@ -2,7 +2,7 @@ name: caaso_app
 description: "Flutter App for Sócio Caaso"
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.0+6
+version: 1.0.0+8
 environment:
   sdk: ^3.6.1
 dependencies:
@@ -34,3 +34,4 @@ flutter:
   assets:
     - assets/logo.png
     - assets/codelab.png
+    - assets/google.png
