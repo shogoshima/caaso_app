@@ -133,6 +133,7 @@ class _AccountPageState extends State<AccountPage> {
         color: Theme.of(context).colorScheme.surface,
         child: TextButton.icon(
           onPressed: () async {
+            Provider.of<AuthState>(context, listen: false).clearUser();
             await AuthService().logout();
           },
           icon: const Icon(Icons.logout),

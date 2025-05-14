@@ -15,7 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  ApiService.initialize('http://10.0.2.2:3001/go');
+  ApiService.initialize('https://codelab.icmc.usp.br/go');
   AuthService();
   BenefitService();
   PlanService();
@@ -45,6 +45,10 @@ class AuthState extends ChangeNotifier {
 
   void saveUser(UserData userData) {
     user = userData;
+  }
+
+  void clearUser() {
+    user = null;
   }
 }
 

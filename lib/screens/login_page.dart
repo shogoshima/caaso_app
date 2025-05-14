@@ -15,7 +15,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _isSigningIn = false;
+  bool _isLoading = false;
   bool _isSignUp = false;
 
   final _loginFormKey = GlobalKey<FormState>();
@@ -125,11 +125,11 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildLoginButton() {
     return FilledButton(
-      onPressed: _isSigningIn
+      onPressed: _isLoading
           ? null
           : () async {
-              if (_isSigningIn) return;
-              setState(() => _isSigningIn = true);
+              if (_isLoading) return;
+              setState(() => _isLoading = true);
 
               try {
                 final userData = await AuthService().signInWithEmail(
@@ -160,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                 showErrorDialog(context, e.toString());
               }
               if (!mounted) return;
-              setState(() => _isSigningIn = false);
+              setState(() => _isLoading = false);
             },
       child: const Text(
         'Entrar',
@@ -175,8 +175,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildForgotPasswordButton() {
     return TextButton(
       onPressed: () async {
-        if (_isSigningIn) return;
-        setState(() => _isSigningIn = true);
+        if (_isLoading) return;
+        setState(() => _isLoading = true);
 
         try {
           await showSendPasswordResetEmailDialog(
@@ -200,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
           showErrorDialog(context, e.toString());
         }
         if (!mounted) return;
-        setState(() => _isSigningIn = false);
+        setState(() => _isLoading = false);
       },
       child: const Text('Esqueci minha senha'),
     );
@@ -208,11 +208,11 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildSignUpButton() {
     return FilledButton(
-      onPressed: _isSigningIn
+      onPressed: _isLoading
           ? null
           : () async {
-              if (_isSigningIn) return;
-              setState(() => _isSigningIn = true);
+              if (_isLoading) return;
+              setState(() => _isLoading = true);
 
               try {
                 if (_signUpFormKey.currentState!.validate()) {
@@ -233,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                 showErrorDialog(context, e.toString());
               }
               if (!mounted) return;
-              setState(() => _isSigningIn = false);
+              setState(() => _isLoading = false);
             },
       child: const Text(
         'Cadastrar',
@@ -247,11 +247,11 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildGoogleButton() {
     return OutlinedButton(
-      onPressed: _isSigningIn
+      onPressed: _isLoading
           ? null
           : () async {
-              if (_isSigningIn) return;
-              setState(() => _isSigningIn = true);
+              if (_isLoading) return;
+              setState(() => _isLoading = true);
 
               try {
                 final userData = await AuthService().signInWithGoogle();
@@ -260,7 +260,7 @@ class _LoginPageState extends State<LoginPage> {
                     .saveUser(userData);
               } catch (e) {
                 showErrorDialog(context, e.toString());
-                setState(() => _isSigningIn = false);
+                setState(() => _isLoading = false);
               }
             },
       style: ElevatedButton.styleFrom(
@@ -392,11 +392,13 @@ class _LoginPageState extends State<LoginPage> {
       bottomNavigationBar: BottomAppBar(
         color: Theme.of(context).colorScheme.surface,
         child: TextButton.icon(
-          onPressed: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => const ScanPage(),
-            ));
-          },
+          onPressed: _isLoading
+              ? null
+              : () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ScanPage(),
+                  ));
+                },
           icon: const Icon(Icons.camera),
           label: const Text('Escanear QR Code (Estabelecimentos)'),
           iconAlignment: IconAlignment.start,
