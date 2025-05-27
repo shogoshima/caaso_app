@@ -1,6 +1,4 @@
 import 'package:caaso_app/services/plan_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'screens/screens.dart';
 import 'services/services.dart';
 import 'models/models.dart';
@@ -15,14 +13,19 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   ApiService.initialize('https://codelab.icmc.usp.br/go');
   AuthService();
   BenefitService();
   PlanService();
   PaymentService();
   SubscriptionService();
-  runApp(ChangeNotifierProvider(
-    create: (context) => AuthState(),
+
+  final authState = AuthState();
+  await authState.loadUser();
+
+  runApp(ChangeNotifierProvider.value(
+    value: authState,
     child: const MyApp(),
   ));
 }
@@ -42,13 +45,29 @@ class MyApp extends StatelessWidget {
 
 class AuthState extends ChangeNotifier {
   UserData? user;
+  bool isLoading = true;
+
+  Future<void> loadUser() async {
+    // ex.: busca de SharedPreferences, API, etc.
+    try {
+      user = await AuthService().getUser();
+    } catch (e) {
+      // Se falhar, deixa o usuário como null
+      user = null;
+    }
+    isLoading = false;
+    notifyListeners();
+  }
 
   void saveUser(UserData userData) {
     user = userData;
+    isLoading = false;
+    notifyListeners();
   }
 
   void clearUser() {
     user = null;
+    notifyListeners();
   }
 }
 
@@ -57,26 +76,22 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        // Enquanto aguarda a primeira emissão, exibe um loading
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
+    // acessa o AuthState fornecido no main()
+    final authState = context.watch<AuthState>();
 
-        // Se houver um usuário logado, vai para AccountPage
-        if (snapshot.hasData &&
-            snapshot.data != null &&
-            snapshot.data!.emailVerified) {
-          return const AccountPage();
-        }
+    // enquanto ainda estiver “carregando” seu usuário
+    if (authState.user == null && authState.isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
-        // Caso contrário, vai para LoginPage
-        return const LoginPage();
-      },
-    );
+    // se tiver usuário, vai pra AccountPage
+    if (authState.user != null) {
+      return const AccountPage();
+    }
+
+    // caso contrário, vai pra LoginPage
+    return const LoginPage();
   }
 }

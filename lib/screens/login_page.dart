@@ -136,13 +136,12 @@ class _LoginPageState extends State<LoginPage> {
                   email: emailController.text,
                   password: passwordController.text,
                 );
-                // ✅ Verificação logo após o await
                 if (!mounted) return;
-                Provider.of<AuthState>(context, listen: false)
-                    .saveUser(userData);
+                // Verificação logo após o await
 
                 final user = FirebaseAuth.instance.currentUser;
                 if (user != null && !user.emailVerified) {
+                  // Caso o email não esteja verificado, manda verificar
                   await showResendVerificationDialog(
                     context,
                     'Seu email não foi verificado ainda. Por favor, verifique-o.',
@@ -154,10 +153,15 @@ class _LoginPageState extends State<LoginPage> {
                   );
                   if (!mounted) return;
                   await AuthService().logout();
+                } else {
+                  // Caso esteja verificado, salva o usuário
+                  Provider.of<AuthState>(context, listen: false)
+                      .saveUser(userData);
                 }
               } catch (e) {
                 if (!mounted) return;
                 showErrorDialog(context, e.toString());
+                await AuthService().logout();
               }
               if (!mounted) return;
               setState(() => _isLoading = false);
@@ -231,6 +235,7 @@ class _LoginPageState extends State<LoginPage> {
               } catch (e) {
                 if (!mounted) return;
                 showErrorDialog(context, e.toString());
+                await AuthService().logout();
               }
               if (!mounted) return;
               setState(() => _isLoading = false);
@@ -259,7 +264,9 @@ class _LoginPageState extends State<LoginPage> {
                 Provider.of<AuthState>(context, listen: false)
                     .saveUser(userData);
               } catch (e) {
+                if (!mounted) return;
                 showErrorDialog(context, e.toString());
+                await AuthService().logout();
                 setState(() => _isLoading = false);
               }
             },
@@ -275,11 +282,11 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Image.asset('assets/google.png', height: 24, width: 24),
             const SizedBox(width: 12),
-            const Text(
+            Text(
               'Logar com Google',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.white,
+                color: _isLoading ? Colors.white38 : Colors.white,
                 fontWeight: FontWeight.w500,
               ),
             ),

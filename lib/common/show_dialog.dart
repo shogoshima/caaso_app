@@ -78,7 +78,7 @@ Future<void> showResendVerificationDialog(
             },
           ),
           TextButton(
-            child: const Text('Reenviar'),
+            child: const Text('Reenviar código'),
             onPressed: () {
               Navigator.of(context).pop();
               onConfirm();
