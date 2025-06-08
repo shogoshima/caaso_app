@@ -13,8 +13,12 @@ class BenefitService {
   Future<List<BenefitData>> fetchBenefits() async {
     final data = await ApiService().get('/benefits');
 
-    return (data['benefits'] as List)
+    final benefits = (data['benefits'] as List)
         .map((json) => BenefitData.fromJson(json))
         .toList();
+
+    benefits.sort((a, b) => a.title.compareTo(b.title));
+
+    return benefits;
   }
 }

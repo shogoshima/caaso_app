@@ -95,6 +95,16 @@ class AccountPage extends StatelessWidget {
                     ),
                     child: const Text('Pagamento'),
                   ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const ScanPage(),
+                        ));
+                      },
+                      child: const Text('Escanear'))
                 ],
               );
             }),

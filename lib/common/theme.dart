@@ -23,7 +23,7 @@ final theme = ThemeData(
       titleLarge: GoogleFonts.oswald(
           fontWeight: FontWeight.bold, color: Colors.white, fontSize: 25),
       titleMedium: GoogleFonts.oswald(
-          fontWeight: FontWeight.bold, color: Colors.white70, fontSize: 20),
+          fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
       titleSmall: GoogleFonts.oswald(
-          fontWeight: FontWeight.bold, color: Colors.white54, fontSize: 15),
+          fontWeight: FontWeight.bold, color: Colors.white70, fontSize: 15),
     ));

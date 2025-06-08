@@ -44,47 +44,49 @@ class _BenefitsPageState extends State<BenefitsPage> {
               );
             }
 
-            List<BenefitData> benefits = snapshot.data!;
+            final items = snapshot.data!;
             return ListView.builder(
-                itemCount: benefits.length,
-                itemBuilder: (context, index) => Card(
-                      color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Row(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final benefit = items[index];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Image.network(
+                            benefit.photoUrl,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: SizedBox(
-                                width: 120,
-                                height: 120,
-                                child: Image.network(
-                                  benefits[index].photoUrl,
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.center,
-                                ),
-                              ),
+                            Text(
+                              benefit.title,
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
-                            Expanded(
-                              child: ListTile(
-                                title: Padding(
-                                  padding: const EdgeInsets.only(bottom: 5),
-                                  child: Text(
-                                    benefits[index].title,
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  benefits[index].description,
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ),
+                            const SizedBox(height: 6),
+                            Text(
+                              benefit.description,
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                           ],
                         ),
                       ),
-                    ));
+                    ],
+                  ),
+                );
+              },
+            );
           },
         ),
       ),

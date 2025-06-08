@@ -61,7 +61,7 @@ class MembershipPage extends StatelessWidget {
                       ),
                       Text(
                         type ?? 'Erro',
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                       Card(
                         color: Theme.of(context).colorScheme.onSurface,
@@ -80,7 +80,7 @@ class MembershipPage extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             'Válido até ${validUntil?.day}/${validUntil?.month}/${validUntil?.year}',
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),
                       ),
