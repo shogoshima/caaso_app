@@ -15,7 +15,6 @@ class AccountPage extends StatelessWidget {
           'assets/logo.png',
           height: 100,
           width: 100,
-          color: Theme.of(context).colorScheme.primary,
         ),
         centerTitle: true,
         toolbarHeight: 100,
